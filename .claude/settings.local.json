@@ -1,8 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(node:*)",
-      "Bash(gh auth:*)"
+      "Bash(*)",
+      "Skill(update-config)"
     ]
   }
 }
