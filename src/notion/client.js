@@ -1,6 +1,8 @@
 const { Client } = require('@notionhq/client');
 
-const notion = new Client({ auth: process.env.NOTION_TOKEN });
+const notion = process.env.NOTION_TOKEN
+  ? new Client({ auth: process.env.NOTION_TOKEN })
+  : null;
 const ROOT_DB_ID = process.env.NOTION_ROOT_DB_ID;
 
 // 날짜 페이지 캐시 (같은 날 중복 생성 방지)
@@ -11,6 +13,8 @@ const datePageCache = new Map();
  * 구조: Root DB → 날짜 페이지 → 플랫폼 섹션 → 콘텐츠 블록
  */
 async function saveToNotion(data) {
+  if (!notion) throw new Error('NOTION_TOKEN이 설정되지 않았습니다');
+
   // 1. 날짜 페이지 확인/생성
   const datePageId = await getOrCreateDatePage(data.collectedAt);
 
@@ -235,6 +239,7 @@ function platformColor(platform) {
  * 오늘 수집 통계 조회
  */
 async function getTodayStats() {
+  if (!notion) throw new Error('NOTION_TOKEN이 설정되지 않았습니다');
   const kstDate = new Date(Date.now() + 9 * 60 * 60 * 1000);
   const dateStr = kstDate.toISOString().slice(0, 10);
 
