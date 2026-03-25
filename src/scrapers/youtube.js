@@ -1,5 +1,4 @@
 const axios = require('axios');
-const { YoutubeTranscript } = require('youtube-transcript');
 
 const YT_API_KEY = process.env.YOUTUBE_API_KEY;
 
@@ -16,6 +15,7 @@ async function scrapeYouTube(url, detected) {
   // 자막/트랜스크립트
   let transcript = '';
   try {
+    const { YoutubeTranscript } = await import('youtube-transcript');
     const segments = await YoutubeTranscript.fetchTranscript(videoId, { lang: 'ko' })
       .catch(() => YoutubeTranscript.fetchTranscript(videoId));
     transcript = segments.map(s => s.text).join(' ').slice(0, 8000);
