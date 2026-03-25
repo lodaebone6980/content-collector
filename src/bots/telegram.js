@@ -4,22 +4,43 @@ const { getTodayStats } = require('../notion/client');
 
 let bot;
 
-function initTelegramBot() {
-  bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
+function initTelegramBot(app) {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const webhookUrl = process.env.RAILWAY_PUBLIC_DOMAIN
+    || process.env.WEBHOOK_URL
+    || '';
+
+  if (webhookUrl) {
+    // 배포 환경: Webhook 방식 (polling 충돌 방지)
+    bot = new TelegramBot(token);
+    const fullUrl = webhookUrl.startsWith('http') ? webhookUrl : `https://${webhookUrl}`;
+    bot.setWebHook(`${fullUrl}/bot${token}`);
+
+    // Express 라우트로 webhook 수신
+    app.post(`/bot${token}`, (req, res) => {
+      bot.processUpdate(req.body);
+      res.sendStatus(200);
+    });
+
+    console.log(`  Telegram webhook 설정: ${fullUrl}/bot***`);
+  } else {
+    // 로컬 개발: Polling 방식
+    bot = new TelegramBot(token, { polling: true });
+    console.log('  Telegram polling 모드');
+  }
+
   const allowedId = String(process.env.TELEGRAM_ALLOWED_CHAT_ID);
 
-  // 링크 수신 처리
+  // 메시지 처리
   bot.on('message', async (msg) => {
     const chatId = String(msg.chat.id);
 
-    // 허용된 계정만 처리
     if (allowedId && chatId !== allowedId) {
       return bot.sendMessage(chatId, '⛔ 인증되지 않은 사용자입니다.');
     }
 
     const text = msg.text || '';
 
-    // 명령어 처리
     if (text === '/start') {
       return bot.sendMessage(chatId,
         '📥 Content Collector Bot\n\n'
@@ -53,15 +74,12 @@ function initTelegramBot() {
       }
     }
 
-    // URL 추출
     const urlMatch = text.match(/https?:\/\/[^\s]+/);
     if (!urlMatch) {
       return bot.sendMessage(chatId, '🔗 URL을 찾을 수 없습니다.\nYouTube, Threads, Instagram 링크를 보내주세요.');
     }
 
     const url = urlMatch[0];
-
-    // #태그 추출 (URL 앞에 붙은 태그)
     const tagMatch = text.match(/#([^\s#]+)/g);
     const extraTags = tagMatch ? tagMatch.map(t => t.slice(1)) : [];
 

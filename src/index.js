@@ -72,7 +72,7 @@ async function main() {
 
   // 텔레그램 봇 초기화 (Mode B)
   if (process.env.TELEGRAM_BOT_TOKEN) {
-    initTelegramBot();
+    initTelegramBot(app);
     console.log('✅ 텔레그램 봇 연결 완료');
   }
 
