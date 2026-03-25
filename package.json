@@ -1,0 +1,32 @@
+{
+  "name": "content-collector",
+  "version": "1.0.0",
+  "description": "YouTube/Threads/Instagram 콘텐츠 자동 수집 및 Notion 저장 시스템",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "node src/utils/test.js"
+  },
+  "dependencies": {
+    "@notionhq/client": "^2.2.15",
+    "axios": "^1.6.7",
+    "cheerio": "^1.0.0-rc.12",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.4",
+    "express": "^4.18.2",
+    "node-cron": "^3.0.3",
+    "node-telegram-bot-api": "^0.64.0",
+    "discord.js": "^14.14.1",
+    "puppeteer": "^22.2.0",
+    "sharp": "^0.33.0",
+    "youtube-transcript": "^1.2.1",
+    "@anthropic-ai/sdk": "^0.20.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

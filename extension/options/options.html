@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Content Collector 설정</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      max-width: 480px; margin: 40px auto; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      padding: 20px; color: #333;
+    }
+    h1 { font-size: 20px; margin-bottom: 24px; }
+    h2 { font-size: 15px; margin: 20px 0 8px; color: #555; }
+
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+    .field input[type="text"], .field input[type="url"] {
+      width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;
+    }
+    .field .hint { font-size: 11px; color: #999; margin-top: 4px; }
+
+    .toggle { display: flex; align-items: center; gap: 8px; margin: 8px 0; }
+    .toggle input { width: 18px; height: 18px; }
+    .toggle label { font-size: 13px; }
+
+    .save-btn {
+      width: 100%; padding: 10px; background: #2196F3; color: white; border: none;
+      border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 20px;
+    }
+    .save-btn:hover { background: #1976D2; }
+
+    .toast {
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+      background: #333; color: white; padding: 10px 20px; border-radius: 8px;
+      font-size: 13px; display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>⚙️ Content Collector 설정</h1>
+
+  <h2>서버 연결</h2>
+  <div class="field">
+    <label>백엔드 URL</label>
+    <input type="url" id="backendUrl" placeholder="https://your-app.railway.app">
+    <div class="hint">Railway/Render 배포 URL 또는 http://localhost:3000</div>
+  </div>
+  <div class="field">
+    <label>API Key</label>
+    <input type="text" id="apiKey" placeholder="your-api-key">
+    <div class="hint">서버의 API_KEY 환경변수와 동일한 값</div>
+  </div>
+
+  <h2>YouTube</h2>
+  <div class="toggle">
+    <input type="checkbox" id="yt-autoLike" checked>
+    <label for="yt-autoLike">수집 시 자동 좋아요</label>
+  </div>
+  <div class="toggle">
+    <input type="checkbox" id="yt-autoSave" checked>
+    <label for="yt-autoSave">수집 시 재생목록에 저장</label>
+  </div>
+  <div class="field">
+    <label>재생목록 이름</label>
+    <input type="text" id="yt-playlist" value="Content Collector">
+  </div>
+
+  <h2>Instagram</h2>
+  <div class="toggle">
+    <input type="checkbox" id="ig-autoSave" checked>
+    <label for="ig-autoSave">수집 시 자동 저장</label>
+  </div>
+  <div class="field">
+    <label>컬렉션 이름</label>
+    <input type="text" id="ig-collection" value="Content Collector">
+  </div>
+
+  <h2>Threads</h2>
+  <div class="toggle">
+    <input type="checkbox" id="th-autoSave" checked>
+    <label for="th-autoSave">수집 시 자동 저장/북마크</label>
+  </div>
+
+  <button class="save-btn" id="save-btn">💾 설정 저장</button>
+
+  <div class="toast" id="toast">설정이 저장되었습니다</div>
+
+  <script src="options.js"></script>
+</body>
+</html>

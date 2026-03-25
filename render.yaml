@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: content-collector
+    runtime: node
+    buildCommand: npm install
+    startCommand: node src/index.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      # 나머지 환경변수는 Render 대시보드에서 직접 설정
